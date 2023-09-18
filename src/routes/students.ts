@@ -1,0 +1,25 @@
+import { Express } from 'express';
+
+import { CS571Route } from "@cs571/f23-api-middleware/src/interfaces/route";
+import { Student } from '../model/student';
+
+export class CS571StudentsRoute implements CS571Route {
+
+    public static readonly ROUTE_NAME: string = '/students';
+
+    private readonly students: Student[];
+
+    public constructor(students: Student[]) {
+        this.students = students;
+    }
+
+    public addRoute(app: Express): void {
+        app.get(CS571StudentsRoute.ROUTE_NAME, (req, res) => {
+            res.status(200).set('Cache-control', 'private, max-age=60').send(this.students);
+        })
+    }
+
+    public getRouteName(): string {
+        return CS571StudentsRoute.ROUTE_NAME;
+    }
+}
